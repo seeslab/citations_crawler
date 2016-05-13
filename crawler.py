@@ -64,10 +64,16 @@ def get_scopus_publications_by_author_id(scopus_id):
 def get_scopus_publications_by_author(name, last_name):
     br.open("http://www.scopus.com/search/form.url?display=authorLookup&clear=t&origin=searchbasic")
 
-    br.select_form(name="AuthorLookupValidatedSearchForm")
+    for form in br.forms():
+        print "Form name:", form.name
+        #print form
 
-    br.form["searchterm1"] = last_name
-    br.form["searchterm2"] = name
+    br.select_form(name="AuthorLookupResultsForm")
+    br.form.set_all_readonly(False)
+    print br.form
+
+    br.form["st1"] = last_name
+    br.form["st2"] = name
 
     br.submit()
 
@@ -81,7 +87,7 @@ def get_scopus_publications_by_author(name, last_name):
 
     br.form["oneClickExport"] = '{"Format":"CSV","SelectedFields":" Authors  Title  Year  SourceTitle  Volume Issue ArtNo PageStart PageEnd PageCount  CitedBy  DOI ","View":"SpecifyFields"}'
     br.form["clickedLink"] = "export"
-    br.form["selectAllCheckBox"] = ["on"]
+    br.form["selectAllCheckBox"] = ["true"]
 
     br.submit()
 
@@ -165,5 +171,7 @@ if __name__ == "__main__":
         print("Only scopus site is supported right now.")
         sys.exit()
 
-    print(csv_to_dict(csv.reader(res, skipinitialspace=True)))
+    papers = csv_to_dict(csv.reader(res, skipinitialspace=True))
+    print len(papers)
+    print papers[0]
 
