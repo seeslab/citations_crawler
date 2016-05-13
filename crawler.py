@@ -43,8 +43,8 @@ def get_orcid_publications_by_author_id(orcid_id):
 
 
 def get_scopus_publications_by_author_id(scopus_id):
-    br.open("http://www.scopus.com/authid/detail.url?authorId=%s" % scopus_id)
-    br.follow_link(text_regex="View (all)? in search results format")
+    br.open("http://www.scopus.com/authid/detail.uri?authorId=%s" % scopus_id)
+    br.follow_link(text_regex="View in search results format")
 
     br.select_form(name="SearchResultsForm")
     br.form.set_all_readonly(False)
@@ -54,8 +54,8 @@ def get_scopus_publications_by_author_id(scopus_id):
 
     br.form["oneClickExport"] = '{"Format":"CSV","SelectedFields":" Authors  Title  Year  SourceTitle  Volume Issue ArtNo PageStart PageEnd PageCount  CitedBy  DOI ","View":"SpecifyFields"}'
     br.form["clickedLink"] = "export"
-    br.form["selectAllCheckBox"] = ["on"]
-
+    br.form["selectAllCheckBox"] = ["true"]
+             
     br.submit()
 
     return br.response()
@@ -166,3 +166,4 @@ if __name__ == "__main__":
         sys.exit()
 
     print(csv_to_dict(csv.reader(res, skipinitialspace=True)))
+
