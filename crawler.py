@@ -49,7 +49,7 @@ def get_scopus_publications_by_author_id(scopus_id):
     br.select_form(name="SearchResultsForm")
     br.form.set_all_readonly(False)
 
-    soup = BeautifulSoup(br.response().read())  # Get ALL current EIDs
+    soup = BeautifulSoup(br.response().read(), "html.parser")  # Get ALL current EIDs
     br.form["selectedEIDs"] = [x['value'] for x in soup.findAll('input', attrs={'name': 'selectedEIDs'})]
 
     br.form["oneClickExport"] = '{"Format":"CSV","SelectedFields":" Authors  Title  Year  SourceTitle  Volume Issue ArtNo PageStart PageEnd PageCount  CitedBy  DOI ","View":"SpecifyFields"}'
@@ -64,13 +64,8 @@ def get_scopus_publications_by_author_id(scopus_id):
 def get_scopus_publications_by_author(name, last_name):
     br.open("http://www.scopus.com/search/form.url?display=authorLookup&clear=t&origin=searchbasic")
 
-    for form in br.forms():
-        print "Form name:", form.name
-        #print form
-
     br.select_form(name="AuthorLookupResultsForm")
     br.form.set_all_readonly(False)
-    print br.form
 
     br.form["st1"] = last_name
     br.form["st2"] = name
@@ -82,7 +77,7 @@ def get_scopus_publications_by_author(name, last_name):
     br.select_form(name="SearchResultsForm")
     br.form.set_all_readonly(False)
 
-    soup = BeautifulSoup(br.response().read())  # Get ALL current EIDs
+    soup = BeautifulSoup(br.response().read(), "html.parser")  # Get ALL current EIDs
     br.form["selectedEIDs"] = [x['value'] for x in soup.findAll('input', attrs={'name': 'selectedEIDs'})]
 
     br.form["oneClickExport"] = '{"Format":"CSV","SelectedFields":" Authors  Title  Year  SourceTitle  Volume Issue ArtNo PageStart PageEnd PageCount  CitedBy  DOI ","View":"SpecifyFields"}'
@@ -106,7 +101,7 @@ def get_scopus_publication_by_fields(fields=[]):
     br.select_form(name="SearchResultsForm")
     br.form.set_all_readonly(False)
 
-    soup = BeautifulSoup(br.response().read())  # Get ALL current EIDs
+    soup = BeautifulSoup(br.response().read(), "html.parser")  # Get ALL current EIDs
     br.form["selectedEIDs"] = [x['value'] for x in soup.findAll('input', attrs={'name': 'selectedEIDs'})]
 
     br.form["oneClickExport"] = '{"Format":"CSV","View":"SpecifyFields", "SelectedFields":"Authors Title SourceTitle CitedBy DOI"}'  # Make selected fields variable?
